@@ -4,12 +4,15 @@ EAPI=6
 
 inherit git-r3 eutils multilib qubes
 
-MY_PV=${PV/_/-}
-MY_P=${PN}-${MY_PV}
+if [[ ${PV} == *9999 ]]; then
+	EGIT_COMMIT=HEAD
+else
+	EGIT_COMMIT="v${PV}"
+fi
+
+EGIT_REPO_URI="https://github.com/QubesOS/qubes-linux-utils.git"
 
 KEYWORDS="amd64"
-EGIT_REPO_URI="https://github.com/QubesOS/qubes-linux-utils.git"
-EGIT_COMMIT="v${PV}"
 DESCRIPTION="Common Linux files for Qubes VM"
 HOMEPAGE="http://www.qubes-os.org"
 LICENSE="GPLv2"
