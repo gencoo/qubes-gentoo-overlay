@@ -1,5 +1,6 @@
 # Maintainer: Frédéric Pierret <frederic.pierret@qubes-os.org>
 
+inherit git-r3
 # Workaround for verifying git tags
 # Feature request: https://bugs.gentoo.org/733430
 qubes_verify_sources_git() {
