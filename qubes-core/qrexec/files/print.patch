@@ -1,0 +1,30 @@
+diff -Nur a/daemon/qrexec-client.c b/daemon/qrexec-client.c
+--- a/daemon/qrexec-client.c	2021-01-06 05:22:23.000000000 +0800
++++ b/daemon/qrexec-client.c	2021-06-13 00:47:54.095690024 +0800
+@@ -180,6 +180,7 @@
+     snprintf(remote.sun_path, sizeof remote.sun_path,
+              "%s/qrexec.%s", socket_dir, domname);
+     len = strlen(remote.sun_path) + sizeof(remote.sun_family);
++    sleep(20);
+     if (connect(s, (struct sockaddr *) &remote, len) == -1) {
+         PERROR("connect");
+         exit(1);
+diff -Nur a/libqrexec/qrexec.h b/libqrexec/qrexec.h
+--- a/libqrexec/qrexec.h	2021-01-06 05:22:23.000000000 +0800
++++ b/libqrexec/qrexec.h	2021-06-12 23:17:57.340400982 +0800
+@@ -160,11 +160,11 @@
+ 
+ // linux-specific stuff below
+ 
+-#define QREXEC_AGENT_TRIGGER_PATH "/var/run/qubes/qrexec-agent"
+-#define QREXEC_AGENT_FDPASS_PATH "/var/run/qubes/qrexec-agent-fdpass"
+-#define MEMINFO_WRITER_PIDFILE "/var/run/meminfo-writer.pid"
++#define QREXEC_AGENT_TRIGGER_PATH "/run/qubes/qrexec-agent"
++#define QREXEC_AGENT_FDPASS_PATH "/run/qubes/qrexec-agent-fdpass"
++#define MEMINFO_WRITER_PIDFILE "/run/meminfo-writer.pid"
+ #define QUBES_RPC_MULTIPLEXER_PATH "/usr/lib/qubes/qubes-rpc-multiplexer"
+-#define QREXEC_DAEMON_SOCKET_DIR "/var/run/qubes"
++#define QREXEC_DAEMON_SOCKET_DIR "/run/qubes"
+ #define QREXEC_POLICY_PROGRAM "/usr/bin/qrexec-policy-exec"
+ #define QREXEC_SERVICE_PATH "/usr/local/etc/qubes-rpc:/etc/qubes-rpc"
+ 

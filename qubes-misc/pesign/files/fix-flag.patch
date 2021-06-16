@@ -1,0 +1,12 @@
+diff -Nur a/Make.defaults b/Make.defaults
+--- a/Make.defaults	2019-05-10 14:53:51.000000000 -0400
++++ b/Make.defaults	2021-06-05 02:26:33.798958731 -0400
+@@ -48,7 +48,7 @@
+ clang_ccldflags =
+ gcc_ccldflags = -fno-merge-constants \
+ 	-fvar-tracking -fvar-tracking-assignments -fkeep-inline-functions \
+-	-Wl,--fatal-warnings,--no-allow-shlib-undefined,--default-symver \
++	-Wl,--fatal-warnings,--no-allow-shlib-undefined \
+ 	-Wl,-O2 -Wl,--no-undefined-version -Wl,-z,relro,-z,now \
+ 	-Wl,--no-add-needed,--no-copy-dt-needed-entries,--as-needed
+ ccldflags = $(cflags) $(CCLDFLAGS) $(LDFLAGS) \

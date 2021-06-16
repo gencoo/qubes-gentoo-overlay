@@ -1,0 +1,98 @@
+diff -uNr a/extras/mini-os/Config.mk b/extras/mini-os/Config.mk
+--- a/extras/mini-os/Config.mk	2020-05-18 06:34:04.000000000 +0800
++++ b/extras/mini-os/Config.mk	2021-05-28 09:04:09.965078398 +0800
+@@ -180,6 +180,7 @@
+ CONFIG_XC ?=y
+ CONFIG_LWIP ?= $(lwip)
+ CONFIG_BALLOON ?= n
++CONFIG_VCHAN ?= n
+ # Setting CONFIG_USE_XEN_CONSOLE copies all print output to the Xen emergency
+ # console apart of standard dom0 handled console.
+ CONFIG_USE_XEN_CONSOLE ?= n
+diff -uNr a/extras/mini-os/Makefile b/extras/mini-os/Makefile
+--- a/extras/mini-os/Makefile	2020-05-18 06:34:04.000000000 +0800
++++ b/extras/mini-os/Makefile	2021-05-28 09:24:38.566807423 +0800
+@@ -146,6 +146,9 @@
+ APP_LDLIBS += -lpci
+ APP_LDLIBS += -lz
+ APP_LDLIBS += -lm
++ifeq ($(vchan),y)
++APP_LDLIBS += -L$(XEN_ROOT)/stubdom/vchan-$(MINIOS_TARGET_ARCH) -lvchan -L$(XEN_ROOT)/stubdom/libvchan-$(MINIOS_TARGET_ARCH) -lxenvchan
++endif
+ LDLIBS += -lc
+ endif
+ 
+@@ -153,6 +156,10 @@
+ OBJS := $(filter-out $(OBJ_DIR)/daytime.o, $(OBJS))
+ endif
+ 
++ifeq ($(CONFIG_VCHAN),y)
++APP_LDLIBS += -L$(XEN_ROOT)/stubdom/libvchan-$(MINIOS_TARGET_ARCH) -lxenvchan
++endif
++
+ $(OBJ_DIR)/$(TARGET)_app.o: $(APP_OBJS) app.lds $(LIBS)
+ 	$(LD) -r -d $(LDFLAGS) -\( $(APP_OBJS) -T app.lds -\) $(APP_LDLIBS) --undefined main -o $@
+ 
+diff -uNr a/stubdom/Makefile b/stubdom/Makefile
+--- a/stubdom/Makefile	2021-04-27 21:00:16.000000000 +0800
++++ b/stubdom/Makefile	2021-05-28 09:22:49.599687398 +0800
+@@ -326,7 +326,7 @@
+   ln -sf $(dir $<)include/*.h include/; \
+   ln -sf $(dir $<)*.[ch] .; \
+   ln -sf $(dir $<)*.pc.in .; \
+-  ln -sf $(dir $<)Makefile .
++  ln -sf $< ./Makefile
+   touch $@
+ endef
+ 
+@@ -357,8 +357,14 @@
+ xenstore/stamp: $(XEN_ROOT)/tools/xenstore/Makefile
+ 	$(do_links)
+ 
++libvchan-$(XEN_TARGET_ARCH)/stamp: $(XEN_ROOT)/tools/libvchan/Makefile
++	$(do_links)
++
++vchan-$(XEN_TARGET_ARCH)/stamp: $(XEN_ROOT)/tools/vchan/Makefile.stubdom
++	$(do_links)
++
+ LINK_LIBS_DIRS := toolcore toollog evtchn gnttab call foreignmemory devicemodel
+-LINK_DIRS := libxc-$(XEN_TARGET_ARCH) xenstore $(foreach dir,$(LINK_LIBS_DIRS),libs-$(XEN_TARGET_ARCH)/$(dir))
++LINK_DIRS := libxc-$(XEN_TARGET_ARCH) xenstore libvchan-$(XEN_TARGET_ARCH) vchan-$(XEN_TARGET_ARCH) $(foreach dir,$(LINK_LIBS_DIRS),libs-$(XEN_TARGET_ARCH)/$(dir))
+ LINK_STAMPS := $(foreach dir,$(LINK_DIRS),$(dir)/stamp)
+ 
+ mk-headers-$(XEN_TARGET_ARCH): $(IOEMU_LINKFARM_TARGET) $(LINK_STAMPS)
+@@ -458,6 +458,23 @@
+ 
+  libxc-$(XEN_TARGET_ARCH)/libxenguest.a: libxc-$(XEN_TARGET_ARCH)/libxenctrl.a
+ 
++# vchan
++#######
++
++.PHONY: vchan
++vchan: vchan-$(XEN_TARGET_ARCH)/libvchan.a
++vchan-$(XEN_TARGET_ARCH)/libvchan.a:
++	CPPFLAGS="$(TARGET_CPPFLAGS) -I$(XEN_ROOT)/tools/libs/evtchn/include -I$(XEN_ROOT)/tools/libs/gnttab/include -I$(XEN_ROOT)/tools/libs/toollog/include" CFLAGS="$(TARGET_CFLAGS)" $(MAKE) -C vchan-$(XEN_TARGET_ARCH)
++
++#######
++# libvchan
++#######
++
++.PHONY: libvchan
++libvchan: libvchan-$(XEN_TARGET_ARCH)/libxenvchan.a
++libvchan-$(XEN_TARGET_ARCH)/libxenvchan.a:
++	CPPFLAGS="$(TARGET_CPPFLAGS)" CFLAGS="$(TARGET_CFLAGS)" $(MAKE) DESTDIR= -C libvchan-$(XEN_TARGET_ARCH) libxenvchan.a
++
+ #######
+ # ioemu
+ #######
+@@ -557,8 +577,8 @@
+ 
+ .PHONY: ioemu-stubdom
+ ioemu-stubdom: APP_OBJS=$(CURDIR)/ioemu/i386-stubdom/qemu.a $(CURDIR)/ioemu/i386-stubdom/libqemu.a $(CURDIR)/ioemu/libqemu_common.a
+-ioemu-stubdom: mini-os-$(XEN_TARGET_ARCH)-ioemu lwip-$(XEN_TARGET_ARCH) libxc ioemu
+-	DEF_CPPFLAGS="$(TARGET_CPPFLAGS)" DEF_CFLAGS="$(TARGET_CFLAGS)" DEF_LDFLAGS="$(TARGET_LDFLAGS)" MINIOS_CONFIG="$(CURDIR)/ioemu-minios.cfg" $(MAKE) DESTDIR= -C $(MINI_OS) OBJ_DIR=$(CURDIR)/$< LWIPDIR=$(CURDIR)/lwip-$(XEN_TARGET_ARCH) APP_OBJS="$(APP_OBJS)"
++ioemu-stubdom: mini-os-$(XEN_TARGET_ARCH)-ioemu lwip-$(XEN_TARGET_ARCH) libxc ioemu vchan libvchan
++	DEF_CPPFLAGS="$(TARGET_CPPFLAGS)" DEF_CFLAGS="$(TARGET_CFLAGS)" DEF_LDFLAGS="$(TARGET_LDFLAGS)" MINIOS_CONFIG="$(CURDIR)/ioemu-minios.cfg" $(MAKE) DESTDIR= -C $(MINI_OS) OBJ_DIR=$(CURDIR)/$< LWIPDIR=$(CURDIR)/lwip-$(XEN_TARGET_ARCH) APP_OBJS="$(APP_OBJS)" vchan=y
+ 
+ .PHONY: caml-stubdom
+ caml-stubdom: mini-os-$(XEN_TARGET_ARCH)-caml lwip-$(XEN_TARGET_ARCH) libxc cross-ocaml caml
