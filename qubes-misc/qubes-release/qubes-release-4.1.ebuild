@@ -25,7 +25,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND="app-arch/rpm[lua,python]"
-RDEPEND="qubes-misc/rpm-macros"
+RDEPEND="app-arch/rpm-macros"
 PDEPEND=""
 
 src_install() {
