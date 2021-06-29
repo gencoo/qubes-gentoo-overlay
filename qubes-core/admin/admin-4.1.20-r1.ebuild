@@ -42,7 +42,7 @@ RDEPEND="${DEPEND}
 	dev-python/docutils
 	dev-python/jinja
 	app-emulation/libvirt[xen,sasl,parted]
-	=app-emulation/libvirt-6.6.0
+	<app-emulation/libvirt-6.8.0
 	qubes-core/qubesdb
 	app-emulation/xen[efi]
 	stubdom-bin? (

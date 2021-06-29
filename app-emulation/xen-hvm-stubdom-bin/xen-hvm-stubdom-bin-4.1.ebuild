@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64"
 
-RDEPEND="app-arch/rpm-4.16.0
+RDEPEND=">=app-arch/rpm-4.16.0.0
 	app-emulation/xen-tools"
 DEPEND="${RDEPEND}"
 BDEPEND=""
