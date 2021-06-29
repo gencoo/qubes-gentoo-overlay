@@ -13,7 +13,7 @@ else
 	inherit rpm
 	MY_PR=0.27
 	MY_PF=${P}-${MY_PR}
-	SRC_URI="https://mirrors.tuna.tsinghua.edu.cn/qubesos/repo/yum/r4.1/current-testing/dom0/fc32/rpm/${MY_PF}.src.rpm"
+	SRC_URI="${REPO_URI}/${MY_PF}.src.rpm"
 fi
 
 KEYWORDS="amd64"

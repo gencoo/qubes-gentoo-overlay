@@ -5,15 +5,15 @@ EAPI=7
 
 inherit rpm
 
-SRC_URI="https://mirrors.tuna.tsinghua.edu.cn/qubesos/repo/yum/r4.1/current/dom0/fc32/rpm/xen-hvm-stubdom-legacy-4.13.0-1.fc32.x86_64.rpm
-	https://mirrors.tuna.tsinghua.edu.cn/qubesos/repo/yum/r4.1/current/dom0/fc32/rpm/xen-hvm-stubdom-linux-1.1.1-1.fc32.x86_64.rpm"
+SRC_URI="${REPO_URI}/xen-hvm-stubdom-legacy-4.13.0-1.${DIST}.x86_64.rpm
+	${REPO_URI}/xen-hvm-stubdom-linux-1.1.1-1.${DIST}.x86_64.rpm"
 DESCRIPTION="xen-hvm-stubdom-legacy xen-hvm-stubdom-linux binaries"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64"
 
-RDEPEND="app-arch/rpm
+RDEPEND="app-arch/rpm-4.16.0
 	app-emulation/xen-tools"
 DEPEND="${RDEPEND}"
 BDEPEND=""

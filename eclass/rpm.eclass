@@ -8,6 +8,11 @@
 
 inherit estack eutils
 
+DIST="fc32"
+RELEASE="r4.1"
+MIRROR="https://mirrors.tuna.tsinghua.edu.cn"
+REPO_URI="${MIRROR}/qubesos/repo/yum/${RELEASE}/current-testing/dom0/${DIST}/rpm"
+
 case "${EAPI:-0}" in
 	[0-6]) DEPEND=">=app-arch/rpm2targz-9.0.0.3g" ;;
 	*) BDEPEND=">=app-arch/rpm2targz-9.0.0.3g" ;;

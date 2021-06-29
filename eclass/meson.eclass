@@ -54,7 +54,7 @@ EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 if [[ -z ${_MESON_ECLASS} ]]; then
 _MESON_ECLASS=1
 
-MESON_DEPEND=">=dev-util/meson-0.56.0
+MESON_DEPEND=">=dev-util/meson-0.55.3
 	>=dev-util/ninja-1.8.2
 	dev-util/meson-format-array
 "
@@ -420,7 +420,10 @@ meson_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install "$@"
+
+	pushd "${S}" > /dev/null || die
 	einstalldocs
+	popd > /dev/null || die
 }
 
 fi

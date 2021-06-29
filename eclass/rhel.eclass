@@ -1,5 +1,12 @@
 inherit estack eutils
 
+MIRROR="https://vault.centos.org"
+DIST=".el8"
+RELEASE="8-stream"
+BASEOS="${MIRROR}/${RELEASE}/BaseOS/Source/SPackages"
+APPSTREAM="${MIRROR}/${RELEASE}/AppStream/Source/SPackages"
+POWERTOOLS="${MIRROR}/${RELEASE}/PowerTools/Source/SPackages"
+
 case "${EAPI:-0}" in
 	[0-6]) DEPEND=">=app-arch/rpm2targz-9.0.0.3g" ;;
 	*) BDEPEND=">=app-arch/rpm2targz-9.0.0.3g" ;;
@@ -49,7 +56,7 @@ rpm_build() {
 
 	eshopts_push -s nullglob
 
-	rpmbuild $RPMOPTION $WORKDIR/*.spec --nodeps --noclean --nodebuginfo --buildroot=$D
+	rpmbuild -bp $WORKDIR/*.spec --nodeps --noclean --nodebuginfo --buildroot=$D
 
 	eshopts_pop
 
@@ -66,4 +73,15 @@ rhel_src_unpack() {
 	done
 }
 
-EXPORT_FUNCTIONS src_unpack
+rhel_src_configure() {
+	sed -i 's?^.make_build.*$?exit 0?' ${WORKDIR}/*.spec
+	rpmbuild --short-circuit -bc $WORKDIR/*.spec --nodeps --noclean --nodebuginfo --buildroot=$D
+}
+
+rhel_src_install() {
+	sed -i "/%make_install/d" ${WORKDIR}/*.spec
+	sed -i "/make install DESTDIR/d" ${WORKDIR}/*.spec
+	rpmbuild --short-circuit -bi $WORKDIR/*.spec --nodeps --noclean --nocheck --nodebuginfo --buildroot=$D
+}
+
+EXPORT_FUNCTIONS src_unpack src_configure src_install

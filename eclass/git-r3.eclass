@@ -1,6 +1,8 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+CENTOS_GIT_REPO_URI="https://gitlab.com/redhat/centos-stream/src"
+
 # @ECLASS: git-r3.eclass
 # @MAINTAINER:
 # Michał Górny <mgorny@gentoo.org>

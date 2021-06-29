@@ -15,7 +15,7 @@ if [[ ${PV} == *9999 ]]; then
 	SRC_URI=""
 else
 	inherit rpm
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="amd64 ~x86"
 	SRC_URI="https://mirror.hackingand.coffee/qubes/repo/yum/r4.1/current-testing/dom0/fc32/rpm/${MY_PF}.fc32.src.rpm
 	https://freedesktop.org/software/pulseaudio/releases/pulseaudio-14.2.tar.xz
 	http://mirrors.163.com/kernel/v5.x/linux-5.4.125.tar.xz"

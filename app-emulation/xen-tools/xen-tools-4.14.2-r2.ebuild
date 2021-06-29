@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE='ncurses,xml,threads(+)'
 
 inherit bash-completion-r1 flag-o-matic multilib python-single-r1 toolchain-funcs rpm
-MY_PR=1
+MY_PR=${PVR##*r}
 MY_PV=${PV/_/-}
 
 if [[ ${PV} == *9999 ]]; then

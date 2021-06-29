@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
@@ -7,6 +7,8 @@
 DESCRIPTION="The GNU Compiler Collection"
 HOMEPAGE="https://gcc.gnu.org/"
 
+# TODO: Please audit this inherit list on future EAPI bumps and ideally
+# conditonalise them where possible.
 inherit eutils flag-o-matic gnuconfig libtool multilib pax-utils toolchain-funcs prefix
 
 tc_is_live() {
@@ -795,7 +797,7 @@ toolchain_src_configure() {
 	is_fortran && GCC_LANG+=",fortran"
 	is_f77 && GCC_LANG+=",f77"
 	is_f95 && GCC_LANG+=",f95"
-	GCC_LANG+=",lto"
+
 	is_ada && GCC_LANG+=",ada"
 
 	confgcc+=( --enable-languages=${GCC_LANG} )
@@ -807,15 +809,6 @@ toolchain_src_configure() {
 		--enable-secureplt
 		--disable-werror
 		--with-system-zlib
-		--enable-gnu-unique-object
-		--enable-initfini-array
-		--enable-offload-targets=nvptx-none
-		--without-cuda-driver
-		--enable-gnu-indirect-function
-		--enable-cet
-		--with-tune=skylake
-		--with-isl
-		--with-arch_32=x86-64
 	)
 
 	if use nls ; then
@@ -1309,6 +1302,7 @@ downgrade_arch_flags() {
 
 	# "added" "arch" "replacement"
 	local archlist=(
+		10 znver3 znver2
 		9 znver2 znver1
 		4.9 bdver4 bdver3
 		4.9 bonnell atom
