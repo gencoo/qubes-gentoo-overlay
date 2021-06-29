@@ -3,7 +3,7 @@
 
 EAPI=7
 PYTHON_COMPAT=( python3_{7,8,9} )
-inherit eutils distutils-r1 
+inherit eutils distutils-r1 qubes git-r3
 
 Q=qubes-core-vchan
 if [[ ${PV} == *9999 ]]; then
@@ -19,6 +19,11 @@ else
 	SRC_URI="${REPO_URI}/${MY_P}-${MY_PR}.${DIST}.src.rpm"
 	S=$WORKDIR/${MY_P}
 fi
+
+QS_PN=${Q}-socket
+EGIT_COMMIT=HEAD
+EGIT_REPO_URI="https://github.com/QubesOS/${QS_PN}.git"
+SS=$WORKDIR/${QS_PN}
 
 KEYWORDS="amd64"
 DESCRIPTION="QubesOS libvchan cross-domain communication library"
@@ -43,15 +48,9 @@ pkg_setup() {
 	export INCLUDEDIR=/usr/include
 }
 
-src_prepare() {
-	if use socket; then
-		inherit qubes git-r3
-		Q_PN=${Q}-socket
-		EGIT_COMMIT=HEAD
-		EGIT_REPO_URI="https://github.com/QubesOS/${Q_PN}.git"
-		SS=$WORKDIR/${Q_PN}
-	fi
-	default
+src_unpack() {
+	rpm_src_unpack ${A}
+	use socket && git clone ${EGIT_REPO_URI}
 }
 
 src_compile() {
