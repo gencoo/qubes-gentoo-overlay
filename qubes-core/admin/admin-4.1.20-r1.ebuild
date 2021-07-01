@@ -43,6 +43,7 @@ RDEPEND="${DEPEND}
 	dev-python/jinja
 	app-emulation/libvirt[xen,sasl,parted]
 	<app-emulation/libvirt-6.8.0
+	acct-group/qubes
 	qubes-core/qubesdb
 	app-emulation/xen[efi]
 	stubdom-bin? (
@@ -114,10 +115,6 @@ src_install() {
 }
 
 pkg_preinst() {
-	if ! grep -q ^qubes: /etc/group ; then
-		groupadd qubes
-	fi
-
 	/usr/lib/qubes/fix-dir-perms.sh
 }
 
@@ -158,7 +155,6 @@ pkg_postrm() {
 		# no more packages left
     	chgrp root /etc/xen
     	chmod 700 /etc/xen
-    	groupdel qubes
 	fi
 
 # Preserve user-modified legacy policy at original location, revert rpm adding
