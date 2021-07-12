@@ -4,15 +4,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{7,8,9} )
 
-inherit git-r3 eutils multilib distutils-r1 qubes
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_COMMIT=HEAD
-else
-	EGIT_COMMIT="v${PV}"
-fi
-
-EGIT_REPO_URI="https://github.com/QubesOS/qubes-linux-utils.git"
+inherit eutils multilib distutils-r1 qubes
 
 KEYWORDS="amd64"
 DESCRIPTION="Common Linux files for Qubes VM"
@@ -33,7 +25,7 @@ RDEPEND="${DEPEND}"
 PDEPEND=""
 
 src_prepare() {
-    qubes_verify_sources_git "${EGIT_COMMIT}"
+    [[ ${PV} == *9999 ]] && qubes_verify_sources_git "${EGIT_COMMIT}"
     default
 }
 

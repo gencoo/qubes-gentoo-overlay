@@ -2,15 +2,7 @@
 
 EAPI=7
 
-inherit git-r3 eutils multilib qubes
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_COMMIT=HEAD
-else
-	EGIT_COMMIT="v${PV}"
-fi
-
-EGIT_REPO_URI="https://github.com/QubesOS/qubes-core-vchan-xen.git"
+inherit eutils multilib qubes
 
 KEYWORDS="amd64"
 DESCRIPTION="QubesOS libvchan cross-domain communication library"
@@ -20,12 +12,12 @@ LICENSE="GPLv2"
 SLOT="0"
 IUSE=""
 
-DEPEND="<app-emulation/xen-tools-4.14"
+DEPEND="app-emulation/xen-tools"
 RDEPEND="${DEPEND}"
 PDEPEND=""
 
 src_prepare() {
-    qubes_verify_sources_git "${EGIT_COMMIT}"
+    [[ ${PV} == *9999 ]] && qubes_verify_sources_git "${EGIT_COMMIT}"
     default
 }
 
