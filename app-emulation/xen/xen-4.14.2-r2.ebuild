@@ -5,9 +5,10 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{7..9} )
 
-inherit flag-o-matic mount-boot multilib python-any-r1 toolchain-funcs rpm
 MY_PR=${PVR##*r}
 MY_PF=${P}-${MY_PR}
+
+inherit flag-o-matic mount-boot multilib python-any-r1 toolchain-funcs rhel
 
 MY_PV=${PV/_/-}
 MY_P=${PN}-${MY_PV}
@@ -33,9 +34,7 @@ else
 	# Hypervisor ABI
 	hv_abi=4.14
 	Q_PN=qubes-vmm-xen
-	Q_PV=4.14.1
-	Q_PR=3
-	Q_PVR=${Q_PV}-${Q_PR}
+	Q_PVR=4.14.1-3
 	Q_PF=${Q_PN}-${Q_PVR}
 	SRC_URI="http://mirrors.163.com/fedora/updates/34/Everything/SRPMS/Packages/x/${MY_PF}.fc34.src.rpm
 	https://github.com/QubesOS/${Q_PN}/archive/refs/tags/v${Q_PVR}.tar.gz -> ${Q_PF}.tar.gz

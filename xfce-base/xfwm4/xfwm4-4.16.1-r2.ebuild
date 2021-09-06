@@ -6,9 +6,7 @@ EAPI=7
 inherit xdg-utils
 
 Q_PN=qubes-desktop-linux-xfce4-xfwm4
-Q_PV=4.14.2
-Q_PR=1
-Q_PVR=${Q_PV}-${Q_PR}
+Q_PVR=4.14.2-1
 Q_PF=${Q_PN}-${Q_PVR}
 
 DESCRIPTION="Window manager for the Xfce desktop environment"

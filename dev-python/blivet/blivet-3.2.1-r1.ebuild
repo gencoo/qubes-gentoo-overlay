@@ -1,21 +1,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{6,8,9} )
 
-inherit eutils multilib distutils-r1
-
-if [[ ${PV} == *9999 ]]; then
-	inherit qubes
-	EGIT_COMMIT=HEAD
-	EGIT_REPO_URI="https://github.com/QubesOS/qubes-${PN}.git"
-	S=$WORKDIR/qubes-${PN}
-else
-	inherit rpm
-	MY_PR=${PVR##*r}
-	MY_PF=${P}-${MY_PR}
-	SRC_URI="${REPO_URI}/python-${MY_PF}.${DIST}.src.rpm"
-fi
+inherit distutils-r1 qubes
 
 KEYWORDS="amd64"
 HOMEPAGE="http://www.qubes-os.org"
@@ -28,28 +16,15 @@ DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
 	sys-devel/gettext
         "
 RDEPEND="${DEPEND}
-	dev-python/six
-	dev-python/pyudev
+	dev-python/six[${PYTHON_USEDEP}]
+	dev-python/pyudev[${PYTHON_USEDEP}]
 	sys-block/parted
-	dev-python/pyparted
+	dev-python/pyparted[${PYTHON_USEDEP}]
 	sys-libs/libselinux
 	sys-libs/libblockdev[cryptsetup,device-mapper,dmraid,loop,swap,mpath,kbd,lvm]
 	sys-apps/util-linux
 	dev-libs/libbytesize[python]
 	sys-process/lsof
-	dev-python/pygobject
+	dev-python/pygobject[${PYTHON_USEDEP}]
 	"
 PDEPEND=""
-
-src_prepare() {
-	default
-}
-
-src_compile() {
-	export PYTHONDONTWRITEBYTECODE=
-	emake  PYTHON=/usr/bin/python
-}
-
-src_install() {
-	emake PYTHON=/usr/bin/python DESTDIR=${D} install
-}

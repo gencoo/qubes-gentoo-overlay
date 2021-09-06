@@ -9,10 +9,9 @@ inherit qt5-build
 DESCRIPTION="Tools for working with Qt translation data files"
 
 if [[ ${QT5_BUILD_TYPE} == release ]]; then
-	KEYWORDS="amd64 arm arm64 ~hppa ppc ppc64 ~sparc x86"
+	KEYWORDS="amd64 arm arm64 ~hppa ppc ppc64 ~riscv ~sparc x86"
 fi
 
-SLOT="0"
 IUSE="qml"
 
 DEPEND="
@@ -52,10 +51,10 @@ src_install() {
 	emake install INSTALL_ROOT=${D}
 
 	dodir /usr/bin
-	cd ${D}/usr/lib64/qt5/bin/
+
 	for i in lconvert lprodump lrelease lupdate
 	do
-		ln -s $i ${i}-qt5
-		ln -s $i ../../../bin/${i}-qt5
+		dosym  ${i}-qt5 /usr/lib64/qt5/bin/$i
+		dosym /usr/bin/${i}-qt5 /usr/lib64/qt5/bin/$i
 	done
 }

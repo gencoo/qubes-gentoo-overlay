@@ -6,7 +6,7 @@ EAPI=7
 PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE='xml,threads(+)'
 
-inherit flag-o-matic multilib python-single-r1 toolchain-funcs rpm
+inherit flag-o-matic multilib python-single-r1 toolchain-funcs rhel
 MY_PR=${PVR##*r}
 MY_PV=${PV/_/-}
 
@@ -19,9 +19,7 @@ UPSTREAM_VER=
 	UPSTREAM_PATCHSET_URI="https://dev.gentoo.org/~dlan/distfiles/${P/-pvgrub/}-upstream-patches-${UPSTREAM_VER}.tar.xz
 		https://github.com/hydrapolic/gentoo-dist/raw/master/xen/${P/-pvgrub/}-upstream-patches-${UPSTREAM_VER}.tar.xz"
 	Q_PN=qubes-vmm-xen-stubdom-legacy
-	Q_PV=4.13.0
-	Q_PR=1
-	Q_PVR=${Q_PV}-${Q_PR}
+	Q_PVR=4.13.0-1
 	Q_PF=${Q_PN}-${Q_PVR}
 	GUI_AGENT=gui-agent-xen-hvm-stubdom
 	GUI_COMMON=gui-common
@@ -90,7 +88,7 @@ retar-externals() {
 }
 
 src_unpack() {
-	rpm_unpack ${A}
+	rhel_unpack ${A}
 	sed -i "/patch5 -p1/d" ${WORKDIR}/xen.spec
 	sed -i 's/EFI_VENDOR=fedora/EFI_VENDOR=qubes/g' ${S}/xen/Makefile
 	rpmbuild --rmsource -bp $WORKDIR/*.spec --nodeps

@@ -1,24 +1,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8,9} )
+PYTHON_COMPAT=( python3_{6,8,9} )
 
-inherit autotools out-of-source bash-completion-r1 eutils linux-info python-any-r1 readme.gentoo-r1 systemd
-Q=qubes-core
-if [[ ${PV} = *9999* ]]; then
-	inherit qubes
-	Q_PN=${Q}-${PN}
-	EGIT_COMMIT=HEAD
-	EGIT_REPO_URI="https://github.com/QubesOS/${Q_PN}.git"
-	S=$WORKDIR/${Q_PN}
-	SLOT="0"
-else
-	inherit rpm
-	MY_PR=${PVR##*r}
-	MY_PF=${P}-${MY_PR}
-	SRC_URI="${REPO_URI}/${MY_PF}.${DIST}.src.rpm"
-	SLOT="0/${PV}"
-fi
+inherit autotools out-of-source bash-completion-r1 eutils linux-info python-any-r1 readme.gentoo-r1 systemd qubes
 
 KEYWORDS="amd64 x86"
 DESCRIPTION="C toolkit to manipulate virtual machines"

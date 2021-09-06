@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs rpm
+inherit flag-o-matic toolchain-funcs rhel
 
 MY_PR=${PVR##*r}
 MY_PF=pesign-${PV}-${MY_PR}

@@ -36,7 +36,7 @@ RDEPEND="
 			xfce-extra/xfce4-verve-plugin
 			xfce-extra/xfce4-xkb-plugin
 		)
-		xfce-base/xfce4-settings-qubes
+		xfce-base/linux-xfce4
 		x11-misc/lightdm[gtk]
 		xfce-extra/xfce4-datetime-plugin
 		xfce-extra/xfce4-places-plugin
@@ -81,7 +81,7 @@ RDEPEND="
 	app-editors/vim-core[minimal]
 	app-editors/vim
 	qubes-core/admin
-	qubes-gui/daemon
+	qubes-gui/gui-daemon
 	qubes-desktop/manager
 	qubes-desktop/linux-manager
 	qubes-app/gpg-split
@@ -96,7 +96,7 @@ RDEPEND="
 	qubes-misc/grub2-xen
 	qubes-mgmt/salt-dom0-virtual-machines
 	qubes-misc/qubes-release
-	qubes-mgmt/qubes-infrastructure
+	qubes-mgmt/infrastructure
 	"
 PDEPEND=""
 

@@ -11,20 +11,9 @@ if [[ -n ${GRUB_AUTORECONF} ]]; then
 	inherit autotools
 fi
 
-inherit bash-completion-r1 flag-o-matic multibuild optfeature pax-utils toolchain-funcs
+inherit bash-completion-r1 flag-o-matic multibuild optfeature pax-utils toolchain-funcs qubes
 
-if [[ ${PV} == *9999 ]]; then
-	inherit qubes
-	EGIT_COMMIT=HEAD
-	EGIT_REPO_URI="https://github.com/QubesOS/qubes-${PN}.git"
-	S=$WORKDIR/qubes-${PN}
-else
-	inherit rpm
-	MY_PR=${PVR##*r}
-	MY_PF=${P}-${MY_PR}
-	SRC_URI="${REPO_URI}/${MY_PF}.${DIST}.src.rpm"
-	S=$WORKDIR/grub-${PV}
-fi
+S=$WORKDIR/grub-${PV}
 
 KEYWORDS="amd64 x86"
 

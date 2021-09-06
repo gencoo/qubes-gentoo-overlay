@@ -5,11 +5,8 @@ EAPI=7
 
 PYTHON_COMPAT=( python{2_7,3_{6,7,8,9}} )
 
-inherit bash-completion-r1 flag-o-matic multibuild optfeature pax-utils toolchain-funcs rpm python-any-r1
+inherit bash-completion-r1 flag-o-matic multibuild optfeature pax-utils toolchain-funcs python-any-r1 qubes
 
-MY_PR=${PVR##*r}
-MY_PF=${P}-${MY_PR}
-SRC_URI="${REPO_URI}/${MY_PF}.${DIST}.src.rpm"
 S=$WORKDIR/grub-$PV
 
 KEYWORDS="amd64"

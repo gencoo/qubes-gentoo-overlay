@@ -6,8 +6,8 @@ EAPI=7
 PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE='ncurses,xml,threads(+)'
 
-inherit bash-completion-r1 flag-o-matic multilib python-single-r1 toolchain-funcs rpm
 MY_PR=${PVR##*r}
+inherit bash-completion-r1 flag-o-matic multilib python-single-r1 toolchain-funcs rhel
 MY_PV=${PV/_/-}
 
 if [[ ${PV} == *9999 ]]; then
@@ -45,9 +45,7 @@ else
 	[[ -n ${OVMF_VER} ]] && \
 		OVMF_PATCHSET_URI="https://dev.gentoo.org/~dlan/distfiles/${PN/-tools}-ovmf-patches-${OVMF_VER}.tar.xz"
 	Q_PN=qubes-vmm-xen
-	Q_PV=4.14.1
-	Q_PR=3
-	Q_PVR=${Q_PV}-${Q_PR}
+	Q_PVR=4.14.1-3
 	Q_PF=${Q_PN}-${Q_PVR}
 	SRC_URI="http://mirrors.163.com/fedora/updates/34/Everything/SRPMS/Packages/x/xen-${MY_PV}-${MY_PR}.fc34.src.rpm
 	https://github.com/QubesOS/${Q_PN}/archive/refs/tags/v${Q_PVR}.tar.gz -> ${Q_PF}.tar.gz
