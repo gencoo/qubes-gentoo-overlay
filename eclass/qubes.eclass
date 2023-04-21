@@ -62,5 +62,5 @@ else
 	fi
 
 	S=$WORKDIR/${MY_P}
-	SRC_URI="${REPO_URI}/${MY_PF}.${DIST:-fc32}.src.rpm"
+	SRC_URI="${REPO_URI}/${MY_PF}.${DIST}.src.rpm"
 fi

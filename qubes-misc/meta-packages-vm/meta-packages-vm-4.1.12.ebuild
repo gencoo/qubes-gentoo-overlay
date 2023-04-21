@@ -15,7 +15,6 @@ IUSE=" "
 
 DEPEND=""
 RDEPEND="
-	app-arch/rpm
 	app-emulation/qubes-gui-common
 	app-emulation/qubes-libvchan-xen
 	app-emulation/qubes-db

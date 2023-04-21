@@ -16,7 +16,7 @@ inherit macros rpm
 
 if [ -z ${MIRROR} ] ; then MIRROR="https://mirrors.tuna.tsinghua.edu.cn"; fi
 RELEASE="r4.1"
-REPO_URI="${MIRROR}/qubesos/repo/yum/${RELEASE}/current-testing/${REPO:-dom0}/${DIST:-fc32}/rpm"
+REPO_URI="${MIRROR}/qubesos/repo/yum/${RELEASE}/current/${REPO:-vm}/${DIST:-fc36}/rpm"
 
 rpm_clean() {
 	# delete everything

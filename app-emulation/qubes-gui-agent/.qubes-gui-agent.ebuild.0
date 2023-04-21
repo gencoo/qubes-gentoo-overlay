@@ -2,7 +2,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{8..11} )
 
 inherit eutils multilib distutils-r1 qubes
 
@@ -17,7 +17,11 @@ IUSE="xfce"
 DEPEND="app-emulation/qubes-libvchan-xen
         app-emulation/qubes-db
         app-emulation/qubes-gui-common
-        x11-base/xorg-x11
+         x11-apps/xprop
+        x11-apps/xsetroot
+        x11-apps/xrandr
+        x11-apps/setxkbmap
+        x11-base/xorg-server:=
         x11-libs/libXdamage
         x11-apps/xinit
         x11-libs/libXcomposite
@@ -69,6 +73,16 @@ src_install() {
 }
 
 pkg_postinst() {
+    # With pulseaudio 15.0, the module directory was changed to
+    # /usr/$(get_libdir)/${PN}/modules
+    pa_ver=$((pkg-config --modversion libpulse 2>/dev/null || echo 0.0) | cut -f 1 -d "-")
+    pa_ver_short=$(echo "${pa_ver}" | cut -f 1 -d".")
+    if [[ "${pa_ver_short}" -ge 15 ]]; then
+        mv /usr/$(get_libdir)/pulse-${pa_ver}/modules/module-vchan-sink.so /usr/$(get_libdir)/pulseaudio/modules
+        rmdir /usr/$(get_libdir)/pulse-${pa_ver}/modules
+        rmdir /usr/$(get_libdir)/pulse-${pa_ver}
+    fi
+
     systemctl enable qubes-gui-agent.service
 
     # Remove useless file from install-rh-agent
